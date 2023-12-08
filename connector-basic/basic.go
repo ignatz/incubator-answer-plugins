@@ -111,13 +111,17 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		return userInfo, fmt.Errorf("code exchange failed: %s", err.Error())
 	}
 
+	log.Errorf("code: %s, token: (%+v) (%s)", code, token, token.AccessToken);
+
 	// Exchange token for user info
 	client := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token.AccessToken},
 	))
 	client.Timeout = 15 * time.Second
 
+
 	response, err := client.Get(g.Config.UserJsonUrl)
+	log.Errorf("client: (%+v)\nresponse: (%+v)", client, response);
 	if err != nil {
 		return userInfo, fmt.Errorf("failed getting user info: %s", err.Error())
 	}
@@ -128,7 +132,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		MetaInfo: string(data),
 	}
 
-	log.Errorf("User info %s", userInfo)
+	log.Errorf("User info: %s,\n  body: %s, \n  %s", userInfo, string(data), token.AccessToken)
 
 	if len(g.Config.UserIDJsonPath) > 0 {
 		userInfo.ExternalID = gjson.GetBytes(data, g.Config.UserIDJsonPath).String()

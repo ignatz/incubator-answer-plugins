@@ -5,7 +5,7 @@ plugin:
         other: basic
       info:
         name:
-          other: OAuth2 Basic
+          other: OAuth2 Basic (Fork)
         description:
           other: Generic OAuth2 Plugin
       config:

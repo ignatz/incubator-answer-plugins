@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/apache/incubator-answer-plugins/connector-basic/i18n"
+	"github.com/ignatz/incubator-answer-plugins/connector-basic/i18n"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/log"
@@ -127,6 +127,8 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	userInfo = plugin.ExternalLoginUserInfo{
 		MetaInfo: string(data),
 	}
+
+	log.Errorf("User info %s", userInfo)
 
 	if len(g.Config.UserIDJsonPath) > 0 {
 		userInfo.ExternalID = gjson.GetBytes(data, g.Config.UserIDJsonPath).String()
